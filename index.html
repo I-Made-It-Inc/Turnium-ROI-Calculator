@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turnium ROI Calculator - Cybersecurity Investment Returns</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="calculator-container">
+        <div class="header">
+            <h1>🛡️ Turnium ROI Calculator</h1>
+            <p>Calculate Your Cybersecurity Investment Returns</p>
+            <div class="industry-selector-container">
+                <label for="industrySelect">Select Your Industry:</label>
+                <select id="industrySelect" class="industry-select" onchange="selectIndustry(this.value)">
+                    <option value="accounting">Accounting Firms</option>
+                    <option value="property">Property Management</option>
+                    <!-- Easy to add more industries here -->
+                    <!-- <option value="healthcare">Healthcare</option> -->
+                    <!-- <option value="legal">Legal Services</option> -->
+                    <!-- <option value="retail">Retail</option> -->
+                    <!-- <option value="manufacturing">Manufacturing</option> -->
+                </select>
+            </div>
+        </div>
+        
+        <div class="calculator-body">
+            <div class="input-section">
+                <h2 class="section-title">
+                    <span class="icon">📊</span>
+                    <span id="inputTitle">Your Firm Details</span>
+                </h2>
+                
+                <!-- Dynamic inputs based on industry -->
+                <div id="industryInputs">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+                
+                <div class="form-group">
+                    <label>Current Security Measures <span class="info-tooltip" title="Select all that apply">?</span></label>
+                    <div class="checkbox-grid">
+                        <div class="checkbox-item" onclick="toggleCheckbox('mfa')">
+                            <input type="checkbox" id="mfa" onchange="updateCalculator()">
+                            <label for="mfa">Multi-Factor Auth</label>
+                        </div>
+                        <div class="checkbox-item" onclick="toggleCheckbox('edr')">
+                            <input type="checkbox" id="edr" onchange="updateCalculator()">
+                            <label for="edr">Endpoint Detection</label>
+                        </div>
+                        <div class="checkbox-item" onclick="toggleCheckbox('monitoring')">
+                            <input type="checkbox" id="monitoring" onchange="updateCalculator()">
+                            <label for="monitoring">24/7 Monitoring</label>
+                        </div>
+                        <div class="checkbox-item" onclick="toggleCheckbox('backup')">
+                            <input type="checkbox" id="backup" onchange="updateCalculator()">
+                            <label for="backup">Backup & Recovery</label>
+                        </div>
+                        <div class="checkbox-item" onclick="toggleCheckbox('training')">
+                            <input type="checkbox" id="training" onchange="updateCalculator()">
+                            <label for="training">Security Training</label>
+                        </div>
+                        <div class="checkbox-item" onclick="toggleCheckbox('compliance')">
+                            <input type="checkbox" id="compliance" onchange="updateCalculator()">
+                            <label for="compliance">Compliance Tools</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="results-section">
+                <h2 class="section-title">
+                    <span class="icon">💰</span> Your Potential Savings
+                </h2>
+                
+                <div class="total-savings">
+                    <h3>Total Annual Savings</h3>
+                    <div class="savings-amount" id="totalSavings">$0</div>
+                    <div class="roi-percentage roi-neutral" id="roiPercentage">0% ROI</div>
+                </div>
+                
+                <div class="payback-info" id="paybackInfo">
+                    Payback Period: Calculating...
+                </div>
+                
+                <div class="savings-breakdown">
+                    <div class="breakdown-header">Savings Breakdown</div>
+                    <div id="breakdownItems">
+                        <!-- Will be populated by JavaScript -->
+                    </div>
+                </div>
+                
+                <div class="cta-section">
+                    <p>Ready to protect your business?</p>
+                    <button class="cta-button" onclick="scheduleDemo()">Schedule Demo</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load JavaScript files -->
+    <script src="js/data.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/calculator.js"></script>
+</body>
+</html>
