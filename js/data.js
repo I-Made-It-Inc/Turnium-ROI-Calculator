@@ -55,13 +55,12 @@ const industryData = {
                 label: 'Number of Buildings',
                 unit: 'buildings'
             },
-            revenue: { 
-                min: 200000, 
-                max: 15000000, 
-                step: 100000, 
-                default: 2000000, 
-                label: 'Annual Revenue',
-                unit: 'currency'
+            tenants: { 
+                min: 10, 
+                max: 2000, 
+                default: 200, 
+                label: 'Number of Tenants',
+                unit: 'tenants'
             },
             insurance: { 
                 min: 1000, 
@@ -70,13 +69,6 @@ const industryData = {
                 default: 3000, 
                 label: 'Current Cyber Insurance (Annual)',
                 unit: 'currency'
-            },
-            tenants: { 
-                min: 10, 
-                max: 2000, 
-                default: 200, 
-                label: 'Number of Tenants',
-                unit: 'tenants'
             }
         },
         risks: {

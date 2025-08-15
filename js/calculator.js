@@ -104,7 +104,7 @@ function calculateAccountingSavings(inputs, config, securityScore) {
 
 // Calculate savings for property management
 function calculatePropertySavings(inputs, config, securityScore) {
-    const { buildings, revenue, insurance, tenants } = inputs;
+    const { buildings, insurance, tenants } = inputs;
     const risks = config.risks;
     
     // Calculate Turnium cost (per building/user basis)
@@ -196,11 +196,10 @@ function scheduleDemo() {
     
     if (currentIndustry === 'accounting') {
         message += `Firm Size: ${inputs.employees} employees\n`;
+        message += `Revenue: ${formatValue('revenue', parseInt(inputs.revenue), 'currency')}\n`;
     } else if (currentIndustry === 'property') {
         message += `Portfolio: ${inputs.buildings} buildings, ${inputs.tenants} tenants\n`;
     }
-    
-    message += `Revenue: ${formatValue('revenue', parseInt(inputs.revenue), 'currency')}\n`;
     message += `Potential Savings: ${netSavings}\n`;
     message += `ROI: ${roi}\n\n`;
     message += `A Turnium specialist will contact you within 24 hours.`;
