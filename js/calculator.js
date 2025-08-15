@@ -2,7 +2,7 @@
 
 // Global variables
 let currentIndustry = 'accounting';
-let webhookURL = 'YOUR_POWER_AUTOMATE_WEBHOOK_URL'; // TODO: Replace with your actual webhook URL
+let webhookURL = 'https://a707011368cce5a4b13bb6e2001702.f5.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/b9d3a2ccbcf44ed8a9eb3e6be275a19e/triggers/manual/paths/invoke/?api-version=1'; // TODO: Replace with your actual webhook URL
 
 // Parse URL parameters to pre-populate form
 function parseURLParameters() {
