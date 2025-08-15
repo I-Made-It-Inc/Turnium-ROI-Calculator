@@ -91,8 +91,27 @@
                 </div>
                 
                 <div class="cta-section">
-                    <p>Ready to protect your business?</p>
-                    <button class="cta-button" onclick="scheduleDemo()">Schedule Demo</button>
+                    <p class="cta-title">Ready to protect your business?</p>
+                    <div class="contact-form">
+                        <div class="form-row">
+                            <div class="form-field">
+                                <input type="text" id="contactName" placeholder="Full Name" class="contact-input">
+                            </div>
+                            <div class="form-field">
+                                <input type="text" id="contactCompany" placeholder="Company Name" class="contact-input">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-field">
+                                <input type="email" id="contactEmail" placeholder="Email Address*" class="contact-input" required>
+                            </div>
+                            <div class="form-field">
+                                <input type="tel" id="contactPhone" placeholder="Phone (Optional)" class="contact-input">
+                            </div>
+                        </div>
+                        <button class="cta-button" onclick="scheduleDemo()" id="submitButton">Schedule Demo</button>
+                        <div id="formMessage" class="form-message"></div>
+                    </div>
                 </div>
             </div>
         </div>

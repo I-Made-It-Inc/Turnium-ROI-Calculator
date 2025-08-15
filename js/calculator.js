@@ -1,7 +1,39 @@
 // js/calculator.js - Main Calculator Logic
 
-// Global variable for current industry
+// Global variables
 let currentIndustry = 'accounting';
+let webhookURL = 'YOUR_POWER_AUTOMATE_WEBHOOK_URL'; // TODO: Replace with your actual webhook URL
+
+// Parse URL parameters to pre-populate form
+function parseURLParameters() {
+    const urlParams = new URLSearchParams(window.location.search);
+    
+    // Pre-populate contact fields if provided
+    const fields = {
+        'name': 'contactName',
+        'company': 'contactCompany',
+        'email': 'contactEmail',
+        'phone': 'contactPhone'
+    };
+    
+    Object.entries(fields).forEach(([param, fieldId]) => {
+        const value = urlParams.get(param);
+        if (value) {
+            const field = document.getElementById(fieldId);
+            if (field) {
+                field.value = decodeURIComponent(value);
+                field.classList.add('prefilled');
+            }
+        }
+    });
+    
+    // Pre-select industry if provided
+    const industry = urlParams.get('industry');
+    if (industry && industryData[industry]) {
+        document.getElementById('industrySelect').value = industry;
+        selectIndustry(industry);
+    }
+}
 
 // Select industry from dropdown
 function selectIndustry(industry) {
@@ -104,7 +136,7 @@ function calculateAccountingSavings(inputs, config, securityScore) {
 
 // Calculate savings for property management
 function calculatePropertySavings(inputs, config, securityScore) {
-    const { buildings, insurance, tenants } = inputs;
+    const { buildings, revenue, insurance, tenants } = inputs;
     const risks = config.risks;
     
     // Calculate Turnium cost (per building/user basis)
@@ -159,65 +191,155 @@ function calculatePropertySavings(inputs, config, securityScore) {
     };
 }
 
-// Schedule demo function
-function scheduleDemo() {
+// Schedule demo function with form validation and webhook submission
+async function scheduleDemo() {
+    // Get form values
+    const name = document.getElementById('contactName').value.trim();
+    const company = document.getElementById('contactCompany').value.trim();
+    const email = document.getElementById('contactEmail').value.trim();
+    const phone = document.getElementById('contactPhone').value.trim();
+    
+    // Get form message element
+    const messageEl = document.getElementById('formMessage');
+    const submitBtn = document.getElementById('submitButton');
+    
+    // Validate email (required field)
+    if (!email) {
+        showMessage('Please enter your email address', 'error');
+        document.getElementById('contactEmail').focus();
+        return;
+    }
+    
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        showMessage('Please enter a valid email address', 'error');
+        document.getElementById('contactEmail').focus();
+        return;
+    }
+    
+    // Get calculator data
     const config = industryData[currentIndustry];
     const inputs = {};
+    const calculatorData = {};
     
     Object.keys(config.metrics).forEach(key => {
         const element = document.getElementById(key);
         if (element) {
-            inputs[key] = element.value;
+            inputs[key] = parseInt(element.value);
+            calculatorData[key] = inputs[key];
         }
     });
     
-    const netSavings = document.getElementById('totalSavings').textContent;
-    const roi = document.getElementById('roiPercentage').textContent;
+    // Add calculated values
+    calculatorData.securityScore = calculateSecurityScore();
+    calculatorData.estimatedSavings = document.getElementById('totalSavings').textContent;
+    calculatorData.roi = document.getElementById('roiPercentage').textContent;
+    calculatorData.paybackPeriod = document.getElementById('paybackInfo').textContent;
     
-    // Prepare form data
-    const formData = {
+    // Prepare payload for webhook
+    const payload = {
+        name: name || 'Not provided',
+        company: company || 'Not provided',
+        email: email,
+        phone: phone || '',
         industry: currentIndustry,
         industryName: config.name,
-        inputs: inputs,
-        netSavings: netSavings,
-        roi: roi,
-        timestamp: new Date().toISOString()
+        calculatorData: calculatorData,
+        timestamp: new Date().toISOString(),
+        sourceURL: window.location.href
     };
     
-    // In production, send to your CRM/backend
-    // fetch('/api/demo-request', {
-    //     method: 'POST',
-    //     headers: { 'Content-Type': 'application/json' },
-    //     body: JSON.stringify(formData)
-    // });
+    // Show loading state
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Submitting...';
+    showMessage('Sending your request...', 'loading');
     
-    // For now, show alert
-    let message = `Demo Request - ${config.name}\n\n`;
-    
-    if (currentIndustry === 'accounting') {
-        message += `Firm Size: ${inputs.employees} employees\n`;
-        message += `Revenue: ${formatValue('revenue', parseInt(inputs.revenue), 'currency')}\n`;
-    } else if (currentIndustry === 'property') {
-        message += `Portfolio: ${inputs.buildings} buildings, ${inputs.tenants} tenants\n`;
+    try {
+        // Check if webhook URL is configured
+        if (webhookURL === 'YOUR_POWER_AUTOMATE_WEBHOOK_URL') {
+            // For testing without webhook - just show success
+            console.log('Demo Request Data:', payload);
+            setTimeout(() => {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Schedule Demo';
+                showMessage('Demo request received! A specialist will contact you within 24 hours.', 'success');
+                
+                // Optional: Clear form after success
+                setTimeout(() => {
+                    document.getElementById('contactName').value = '';
+                    document.getElementById('contactCompany').value = '';
+                    document.getElementById('contactEmail').value = '';
+                    document.getElementById('contactPhone').value = '';
+                    document.querySelectorAll('.contact-input').forEach(input => {
+                        input.classList.remove('prefilled');
+                    });
+                }, 3000);
+            }, 1000);
+            return;
+        }
+        
+        // Send to Power Automate webhook
+        const response = await fetch(webhookURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payload)
+        });
+        
+        if (response.ok) {
+            // Success
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Schedule Demo';
+            showMessage('Demo request submitted successfully! We\'ll contact you within 24 hours.', 'success');
+            
+            // Track with analytics if available
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'demo_request', {
+                    'industry': currentIndustry,
+                    'roi_percentage': parseInt(calculatorData.roi),
+                    'savings_amount': calculatorData.estimatedSavings,
+                    'company_size': calculatorData.employees || calculatorData.buildings
+                });
+            }
+            
+            // Clear form after success
+            setTimeout(() => {
+                document.getElementById('contactName').value = '';
+                document.getElementById('contactCompany').value = '';
+                document.getElementById('contactEmail').value = '';
+                document.getElementById('contactPhone').value = '';
+                document.querySelectorAll('.contact-input').forEach(input => {
+                    input.classList.remove('prefilled');
+                });
+                messageEl.style.display = 'none';
+            }, 5000);
+            
+        } else {
+            throw new Error('Failed to submit request');
+        }
+        
+    } catch (error) {
+        console.error('Submission error:', error);
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Schedule Demo';
+        showMessage('There was an error submitting your request. Please try again or contact us directly.', 'error');
     }
-    message += `Potential Savings: ${netSavings}\n`;
-    message += `ROI: ${roi}\n\n`;
-    message += `A Turnium specialist will contact you within 24 hours.`;
-    
-    alert(message);
-    
-    // Optional: Track with analytics
-    // if (typeof gtag !== 'undefined') {
-    //     gtag('event', 'demo_request', {
-    //         'industry': currentIndustry,
-    //         'roi_percentage': parseInt(roi),
-    //         'savings_amount': netSavings
-    //     });
-    // }
+}
+
+// Show form message helper
+function showMessage(message, type) {
+    const messageEl = document.getElementById('formMessage');
+    messageEl.textContent = message;
+    messageEl.className = `form-message ${type}`;
 }
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', () => {
+    // Parse URL parameters and pre-populate fields
+    parseURLParameters();
+    
     // Initialize checkboxes
     initializeCheckboxes();
     
@@ -226,4 +348,13 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Calculate initial values
     updateCalculator();
+    
+    // Add enter key support for form submission
+    document.querySelectorAll('.contact-input').forEach(input => {
+        input.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                scheduleDemo();
+            }
+        });
+    });
 });
