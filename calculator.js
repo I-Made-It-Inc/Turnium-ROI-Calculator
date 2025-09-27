@@ -16,32 +16,137 @@ class ROICalculator {
             }
         };
 
+        // Log scale constants
+        this.revenueMin = 100000;  // $100K
+        this.revenueMax = 500000000;  // $500M
+        this.employeesMin = 1;
+        this.employeesMax = 1000;
+        this.insuranceMin = 100;  // $100
+        this.insuranceMax = 500000;  // $500K
+        this.clientsMin = 10;
+        this.clientsMax = 100000;  // 100K
+
+        this.initializeSliderValues();
         this.initializeEventListeners();
         this.updateCalculations();
+    }
+
+    // Convert revenue value to slider position (0-1000)
+    revenueToSlider(revenue) {
+        const minLog = Math.log10(this.revenueMin);
+        const maxLog = Math.log10(this.revenueMax);
+        const revenueLog = Math.log10(revenue);
+        return Math.round(((revenueLog - minLog) / (maxLog - minLog)) * 1000);
+    }
+
+    // Convert slider position (0-1000) to revenue value
+    sliderToRevenue(sliderValue) {
+        const minLog = Math.log10(this.revenueMin);
+        const maxLog = Math.log10(this.revenueMax);
+        const revenueLog = minLog + (sliderValue / 1000) * (maxLog - minLog);
+        return Math.round(Math.pow(10, revenueLog));
+    }
+
+    // Convert employees value to slider position (0-1000)
+    employeesToSlider(employees) {
+        const minLog = Math.log10(this.employeesMin);
+        const maxLog = Math.log10(this.employeesMax);
+        const employeesLog = Math.log10(employees);
+        return Math.round(((employeesLog - minLog) / (maxLog - minLog)) * 1000);
+    }
+
+    // Convert slider position (0-1000) to employees value
+    sliderToEmployees(sliderValue) {
+        const minLog = Math.log10(this.employeesMin);
+        const maxLog = Math.log10(this.employeesMax);
+        const employeesLog = minLog + (sliderValue / 1000) * (maxLog - minLog);
+        return Math.round(Math.pow(10, employeesLog));
+    }
+
+    // Convert insurance value to slider position (0-1000)
+    insuranceToSlider(insurance) {
+        const minLog = Math.log10(this.insuranceMin);
+        const maxLog = Math.log10(this.insuranceMax);
+        const insuranceLog = Math.log10(insurance);
+        return Math.round(((insuranceLog - minLog) / (maxLog - minLog)) * 1000);
+    }
+
+    // Convert slider position (0-1000) to insurance value
+    sliderToInsurance(sliderValue) {
+        const minLog = Math.log10(this.insuranceMin);
+        const maxLog = Math.log10(this.insuranceMax);
+        const insuranceLog = minLog + (sliderValue / 1000) * (maxLog - minLog);
+        return Math.round(Math.pow(10, insuranceLog));
+    }
+
+    // Convert clients value to slider position (0-1000)
+    clientsToSlider(clients) {
+        const minLog = Math.log10(this.clientsMin);
+        const maxLog = Math.log10(this.clientsMax);
+        const clientsLog = Math.log10(clients);
+        return Math.round(((clientsLog - minLog) / (maxLog - minLog)) * 1000);
+    }
+
+    // Convert slider position (0-1000) to clients value
+    sliderToClients(sliderValue) {
+        const minLog = Math.log10(this.clientsMin);
+        const maxLog = Math.log10(this.clientsMax);
+        const clientsLog = minLog + (sliderValue / 1000) * (maxLog - minLog);
+        return Math.round(Math.pow(10, clientsLog));
+    }
+
+    initializeSliderValues() {
+        // Set initial employees slider position based on log scale
+        const employeesSlider = document.getElementById('employees');
+        employeesSlider.value = this.employeesToSlider(this.inputs.employees);
+        document.getElementById('employees-value').textContent = this.formatNumber(this.inputs.employees);
+
+        // Set initial revenue slider position based on log scale
+        const revenueSlider = document.getElementById('revenue');
+        revenueSlider.value = this.revenueToSlider(this.inputs.revenue);
+        document.getElementById('revenue-value').textContent = this.formatCurrency(this.inputs.revenue, true);
+
+        // Set initial clients slider position based on log scale
+        const clientsSlider = document.getElementById('clients');
+        clientsSlider.value = this.clientsToSlider(this.inputs.clients);
+        document.getElementById('clients-value').textContent = this.formatNumber(this.inputs.clients);
+
+        // Set initial insurance slider position based on log scale
+        const insuranceSlider = document.getElementById('insurance');
+        insuranceSlider.value = this.insuranceToSlider(this.inputs.insurance);
+        document.getElementById('insurance-value').textContent = this.formatCurrency(this.inputs.insurance);
     }
 
     initializeEventListeners() {
         // Slider inputs
         document.getElementById('employees').addEventListener('input', (e) => {
-            this.inputs.employees = parseInt(e.target.value);
+            // Convert slider position (0-100) to log scale employees value
+            const sliderValue = parseInt(e.target.value);
+            this.inputs.employees = this.sliderToEmployees(sliderValue);
             document.getElementById('employees-value').textContent = this.formatNumber(this.inputs.employees);
             this.updateCalculations();
         });
 
         document.getElementById('revenue').addEventListener('input', (e) => {
-            this.inputs.revenue = parseInt(e.target.value);
+            // Convert slider position (0-100) to log scale revenue value
+            const sliderValue = parseInt(e.target.value);
+            this.inputs.revenue = this.sliderToRevenue(sliderValue);
             document.getElementById('revenue-value').textContent = this.formatCurrency(this.inputs.revenue, true);
             this.updateCalculations();
         });
 
         document.getElementById('clients').addEventListener('input', (e) => {
-            this.inputs.clients = parseInt(e.target.value);
+            // Convert slider position (0-100) to log scale clients value
+            const sliderValue = parseInt(e.target.value);
+            this.inputs.clients = this.sliderToClients(sliderValue);
             document.getElementById('clients-value').textContent = this.formatNumber(this.inputs.clients);
             this.updateCalculations();
         });
 
         document.getElementById('insurance').addEventListener('input', (e) => {
-            this.inputs.insurance = parseInt(e.target.value);
+            // Convert slider position (0-100) to log scale insurance value
+            const sliderValue = parseInt(e.target.value);
+            this.inputs.insurance = this.sliderToInsurance(sliderValue);
             document.getElementById('insurance-value').textContent = this.formatCurrency(this.inputs.insurance);
             this.updateCalculations();
         });
