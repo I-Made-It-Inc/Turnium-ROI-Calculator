@@ -173,6 +173,11 @@ class ROICalculator {
         });
     }
 
+    // Turnium investment
+    calculateTurniumCost() {
+        return this.inputs.employees * 250 * 12;
+    }
+
     calculateSecurityScore() {
         let score = 0;
         Object.values(this.inputs.securityMeasures).forEach(measure => {
@@ -181,10 +186,41 @@ class ROICalculator {
         return score;
     }
 
-    calculateTurniumCost() {
-        return this.inputs.employees * 250 * 12;
+    // Assume each security layer reduces risk by 10%
+    calculateRiskReduction() {
+        const securityScore = this.calculateSecurityScore();
+        return securityScore * 0.10;
     }
 
+    calculateCurrentBreachProb() {
+        const baseBreachProb = 0.15;
+        const riskReductionFactor = this.calculateRiskReduction();
+        const currentBreachProb = baseBreachProb * (1 - riskReductionFactor);
+        return currentBreachProb;
+    }
+
+    calculateRansomwareInvolvement() {
+        // 88% for small companies, 39% for large companies
+        const smallCompanyRate = 0.88;
+        const largeCompanyRate = 0.39;
+        
+        // Define company size thresholds
+        const smallCompanyThreshold = 100;
+        const largeCompanyThreshold = 500;
+        
+        if (this.inputs.employees <= smallCompanyThreshold) {
+            return smallCompanyRate;
+        } else if (this.inputs.employees >= largeCompanyThreshold) {
+            return largeCompanyRate;
+        } else {
+            // Linear interpolation between small and large company rates
+            const sizeRatio = (this.inputs.employees - smallCompanyThreshold) / 
+                             (largeCompanyThreshold - smallCompanyThreshold);
+            return smallCompanyRate - (sizeRatio * (smallCompanyRate - largeCompanyRate));
+        }
+    }
+
+    // Assume 15% baseline insurance reduction, up to 30% if high risk
     calculateInsuranceSavings() {
         const securityScore = this.calculateSecurityScore();
         const reductionRate = 0.30 - (securityScore * 0.025);
@@ -192,17 +228,22 @@ class ROICalculator {
     }
 
     calculateBreachSavings() {
-        const securityScore = this.calculateSecurityScore();
-        const baseBreachProb = 0.15;
-        const riskReductionFactor = securityScore * 0.10;
-        const currentBreachProb = baseBreachProb * (1 - riskReductionFactor);
+        const currentBreachProb = this.calculateCurrentBreachProb();
         const turniumProb = 0.02;
 
+        // Extrapolate breach costs based on company size
+        // Small business -> $46k
+        // Medium business -> 97.2k
+        // Large business -> 150k
         let averageBreachCost;
         if (this.inputs.employees <= 100) {
             averageBreachCost = 46000;
-        } else if (this.inputs.employees <= 500) {
-            averageBreachCost = 97200;
+        } else if (this.inputs.employees <= 400) { // Interpolate between 100 to 400 employees
+            const ratio = (this.inputs.employees - 100) / (400 - 100);
+            averageBreachCost = 46000 + (ratio * (97200 - 46000));
+        } else if (this.inputs.employees <= 700) { // Interpolate between 400 to 700 employees
+            const ratio = (this.inputs.employees - 400) / (700 - 400);
+            averageBreachCost = 97200 + (ratio * (150000 - 97200));
         } else {
             averageBreachCost = 150000;
         }
@@ -210,27 +251,61 @@ class ROICalculator {
         return (currentBreachProb - turniumProb) * averageBreachCost;
     }
 
+    // TODO: extrapolate costs
     calculateRansomwareSavings() {
-        const securityScore = this.calculateSecurityScore();
-        const baseRansomwareProb = 0.132;
-        const riskReductionFactor = securityScore * 0.10;
-        const currentRansomwareProb = baseRansomwareProb * (1 - riskReductionFactor);
+        const currentBreachProb = this.calculateCurrentBreachProb();
+        const ransomwareInvolvement = this.calculateRansomwareInvolvement();
+        const currentRansomwareProb = currentBreachProb * ransomwareInvolvement;
         const turniumProb = 0.02;
 
+        // Stats
+        // $10M-$50M - $106,310
+        // $50M-$250M - $169,364
+        // $250M-$500M - $1,000,000
+
+        // Extrapolate payment by company revenue
+        // $5M or less -> $53,155 (106310 / 2)
+        // $5M to $20M -> interpolate to $106,310
+        // $20M to $100M -> interpolate to $169,364
+        // $100M to $500M -> interpolate to $1,000,000
         let ransomPayment;
-        if (this.inputs.revenue <= 50000000) {
-            ransomPayment = 106310;
-        } else if (this.inputs.revenue <= 250000000) {
-            ransomPayment = 169364;
+        if (this.inputs.revenue <= 5000000) {
+            ransomPayment = 106310 / 2;
+        } else if (this.inputs.revenue <= 20000000) {
+            const ratio = (this.inputs.revenue - 5000000) / (20000000 - 5000000);
+            ransomPayment = (106310 / 2) + (ratio * (106310 / 2));
+        } else if (this.inputs.revenue <= 100000000) {
+            const ratio = (this.inputs.revenue - 20000000) / (100000000 - 20000000);
+            ransomPayment = 106310 + (ratio * (169364 - 106310));
+        } else if (this.inputs.revenue <= 500000000) {
+            const ratio = (this.inputs.revenue - 100000000) / (500000000 - 100000000);
+            ransomPayment = 169364 + (ratio * (1000000 - 169364));
         } else {
             ransomPayment = 1000000;
         }
 
+        // Stats
+        // 100-250 employees - $638,536
+        // 251-500 employees - $1,078,763
+        // 501-1,000 employees - $1,570,927
+
+        // Extrapolate recovery cost by company size
+        // 50 employees or less -> $319,268 (638,536 / 2)
+        // 50 to 150 employees -> interpolate to $638,536
+        // 150 to 350 employees -> interpolate to $1,078,763
+        // 350 to 750 employees -> interpolate to $1,570,927
         let recoveryCost;
-        if (this.inputs.employees <= 250) {
-            recoveryCost = 638536;
-        } else if (this.inputs.employees <= 500) {
-            recoveryCost = 1078763;
+        if (this.inputs.employees <= 50) {
+            recoveryCost = 638536 / 2;
+        } else if (this.inputs.employees <= 150) {
+            const ratio = (this.inputs.employees - 50) / (150 - 50);
+            recoveryCost = (638536 / 2) + (ratio * (638536 / 2));
+        } else if (this.inputs.employees <= 350) {
+            const ratio = (this.inputs.employees - 150) / (350 - 150);
+            recoveryCost = 638536 + (ratio * (1078763 - 638536));
+        } else if (this.inputs.employees <= 750) {
+            const ratio = (this.inputs.employees - 350) / (750 - 350);
+            recoveryCost = 1078763 + (ratio * (1570927 - 1078763));
         } else {
             recoveryCost = 1570927;
         }
@@ -248,6 +323,7 @@ class ROICalculator {
         return (currentProb - turniumProb) * becLoss;
     }
 
+    // Assume 30% baseline efficiency gain, up to 60% if insecure
     calculateComplianceSavings() {
         const securityScore = this.calculateSecurityScore();
         const complianceHours = (this.inputs.employees * 40) + (this.inputs.clients / 20);
@@ -266,15 +342,14 @@ class ROICalculator {
     }
 
     calculateDowntimeSavings() {
-        const securityScore = this.calculateSecurityScore();
-        const baseRansomwareProb = 0.132;
-        const riskReductionFactor = securityScore * 0.10;
-        const currentRansomwareProb = baseRansomwareProb * (1 - riskReductionFactor);
+        const currentBreachProb = this.calculateCurrentBreachProb();
+        const ransomwareInvolvement = this.calculateRansomwareInvolvement();
+        const currentRansomwareProb = currentBreachProb * ransomwareInvolvement;
         const turniumProb = 0.02;
 
-        const averageDowntime = 18;
-        const currentDowntimeDays = currentRansomwareProb * averageDowntime;
-        const turniumDowntimeDays = turniumProb * averageDowntime;
+        const averageDowntimeDays = 18;
+        const currentDowntimeDays = currentRansomwareProb * averageDowntimeDays;
+        const turniumDowntimeDays = turniumProb * averageDowntimeDays;
 
         const dailyCost = this.inputs.revenue / 260;
 
@@ -282,10 +357,7 @@ class ROICalculator {
     }
 
     calculateRetentionSavings() {
-        const securityScore = this.calculateSecurityScore();
-        const baseBreachProb = 0.15;
-        const riskReductionFactor = securityScore * 0.10;
-        const currentBreachProb = baseBreachProb * (1 - riskReductionFactor);
+        const currentBreachProb = this.calculateCurrentBreachProb();
         const turniumProb = 0.02;
 
         const clientChurnRate = 0.35;
@@ -295,10 +367,7 @@ class ROICalculator {
     }
 
     calculatePenaltySavings() {
-        const securityScore = this.calculateSecurityScore();
-        const baseBreachProb = 0.15;
-        const riskReductionFactor = securityScore * 0.10;
-        const currentBreachProb = baseBreachProb * (1 - riskReductionFactor);
+        const currentBreachProb = this.calculateCurrentBreachProb();
 
         return currentBreachProb * 60000;
     }
