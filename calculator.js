@@ -248,10 +248,13 @@ class ROICalculator {
             averageBreachCost = 150000;
         }
 
-        return (currentBreachProb - turniumProb) * averageBreachCost;
+        // Multiply by (1 - ransomware involvement) to avoid double-counting ransomware costs
+        const ransomwareInvolvement = this.calculateRansomwareInvolvement();
+        const generalBreachCost = averageBreachCost * (1 - ransomwareInvolvement);
+
+        return (currentBreachProb - turniumProb) * generalBreachCost;
     }
 
-    // TODO: extrapolate costs
     calculateRansomwareSavings() {
         const currentBreachProb = this.calculateCurrentBreachProb();
         const ransomwareInvolvement = this.calculateRansomwareInvolvement();
@@ -353,7 +356,9 @@ class ROICalculator {
 
         const dailyCost = this.inputs.revenue / 260;
 
-        return (currentDowntimeDays - turniumDowntimeDays) * dailyCost;
+        // Apply overlap discount to avoid double-counting with ransomware savings
+        const overlapDiscount = 0.5;
+        return (currentDowntimeDays - turniumDowntimeDays) * dailyCost * overlapDiscount;
     }
 
     calculateRetentionSavings() {
@@ -363,7 +368,9 @@ class ROICalculator {
         const clientChurnRate = 0.35;
         const probDifference = currentBreachProb - turniumProb;
 
-        return clientChurnRate * this.inputs.revenue * probDifference;
+        // Apply discount multiplier to avoid overestimating retention impact
+        const retentionDiscount = 0.7;
+        return clientChurnRate * this.inputs.revenue * probDifference * retentionDiscount;
     }
 
     calculatePenaltySavings() {
