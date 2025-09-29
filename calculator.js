@@ -397,7 +397,7 @@ class ROICalculator {
 
         const netSavings = totalSavings - turniumCost;
         const roi = turniumCost > 0 ? (netSavings / turniumCost) * 100 : 0;
-        const paybackPeriod = netSavings > 0 ? Math.round((turniumCost / netSavings) * 12) : 0;
+        const paybackPeriod = totalSavings > 0 ? Math.round((turniumCost / totalSavings) * 12) : 0;
 
         // Update display
         document.getElementById('total-savings').textContent = this.formatCurrency(netSavings);
@@ -410,11 +410,11 @@ class ROICalculator {
             { label: 'Cyber Insurance Premium Reduction', value: insuranceSavings, id: 'insurance-savings' },
             { label: 'Data Breach Prevention', value: breachSavings, id: 'breach-savings' },
             { label: 'Ransomware Attack Prevention', value: ransomwareSavings, id: 'ransomware-savings' },
-            { label: 'Email Fraud Prevention', value: becSavings, id: 'bec-savings' },
+            { label: 'Business Email Compromise Prevention', value: becSavings, id: 'bec-savings' },
             { label: 'Compliance Efficiency Gains', value: complianceSavings, id: 'compliance-savings' },
             { label: 'IT Management Consolidation', value: itSavings, id: 'it-savings' },
             { label: 'Downtime Prevention Value', value: downtimeSavings, id: 'downtime-savings' },
-            { label: 'Client Trust & Retention', value: retentionSavings, id: 'retention-savings' },
+            { label: 'Client Trust & Retention Protection', value: retentionSavings, id: 'retention-savings' },
             { label: 'Tax Preparer Penalty Prevention', value: penaltySavings, id: 'penalty-savings' }
         ];
 
