@@ -397,7 +397,7 @@ class ROICalculator {
 
         const netSavings = totalSavings - turniumCost;
         const roi = turniumCost > 0 ? (netSavings / turniumCost) * 100 : 0;
-        const paybackPeriod = netSavings > 0 ? Math.round((turniumCost / netSavings) * 12) : 0;
+        const paybackPeriod = totalSavings > 0 ? Math.round((turniumCost / totalSavings) * 12) : 0;
 
         // Update display
         document.getElementById('total-savings').textContent = this.formatCurrency(netSavings);
@@ -405,16 +405,39 @@ class ROICalculator {
         document.getElementById('payback-period').textContent = paybackPeriod + ' months';
         document.getElementById('turnium-cost').textContent = this.formatCurrency(turniumCost) + '/year';
 
-        // Update breakdown
-        document.getElementById('insurance-savings').textContent = this.formatCurrency(insuranceSavings);
-        document.getElementById('breach-savings').textContent = this.formatCurrency(breachSavings);
-        document.getElementById('ransomware-savings').textContent = this.formatCurrency(ransomwareSavings);
-        document.getElementById('bec-savings').textContent = this.formatCurrency(becSavings);
-        document.getElementById('compliance-savings').textContent = this.formatCurrency(complianceSavings);
-        document.getElementById('it-savings').textContent = this.formatCurrency(itSavings);
-        document.getElementById('downtime-savings').textContent = this.formatCurrency(downtimeSavings);
-        document.getElementById('retention-savings').textContent = this.formatCurrency(retentionSavings);
-        document.getElementById('penalty-savings').textContent = this.formatCurrency(penaltySavings);
+        // Create array of savings categories with their values
+        const savingsCategories = [
+            { label: 'Cyber Insurance Premium Reduction', value: insuranceSavings, id: 'insurance-savings' },
+            { label: 'Data Breach Prevention', value: breachSavings, id: 'breach-savings' },
+            { label: 'Ransomware Attack Prevention', value: ransomwareSavings, id: 'ransomware-savings' },
+            { label: 'Business Email Compromise Prevention', value: becSavings, id: 'bec-savings' },
+            { label: 'Compliance Efficiency Gains', value: complianceSavings, id: 'compliance-savings' },
+            { label: 'IT Management Consolidation', value: itSavings, id: 'it-savings' },
+            { label: 'Downtime Prevention Value', value: downtimeSavings, id: 'downtime-savings' },
+            { label: 'Client Trust & Retention Protection', value: retentionSavings, id: 'retention-savings' },
+            { label: 'Tax Preparer Penalty Prevention', value: penaltySavings, id: 'penalty-savings' }
+        ];
+
+        // Sort categories by value in descending order
+        savingsCategories.sort((a, b) => b.value - a.value);
+
+        // Update the breakdown items container
+        const breakdownContainer = document.querySelector('.breakdown-items');
+        if (breakdownContainer) {
+            // Clear existing items
+            breakdownContainer.innerHTML = '';
+
+            // Add sorted items
+            savingsCategories.forEach(category => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'breakdown-item';
+                itemDiv.innerHTML = `
+                    <span class="item-label">${category.label}</span>
+                    <span class="item-value" id="${category.id}">${this.formatCurrency(category.value)}</span>
+                `;
+                breakdownContainer.appendChild(itemDiv);
+            });
+        }
     }
 
     formatCurrency(value, compact = false) {
