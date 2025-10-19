@@ -149,8 +149,21 @@ body {
 
 /* ==================== CALCULATOR SECTION ==================== */
 .calculator-section {
+    position: relative;
     background: var(--white);
     padding: 51px 17px;
+    border-bottom-left-radius: 130px;
+}
+
+.calculator-section::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 130px;
+    height: 130px;
+    background: #1CBCBD;
+    z-index: -1;
 }
 
 .calculator-container {
@@ -452,8 +465,22 @@ body {
 
 /* ==================== WHEEL SECTION ==================== */
 .wheel-section {
-    background: linear-gradient(135deg, #1CBCBD 0%, #17A5A6 100%);
+    position: relative;
+    background: #1CBCBD;
     padding: 68px 17px;
+    border-top-right-radius: 130px;
+    border-bottom-left-radius: 130px;
+}
+
+.wheel-section::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 130px;
+    height: 130px;
+    background:#1B1549;
+    z-index: -1;
 }
 
 .wheel-container {
@@ -527,10 +554,23 @@ body {
 
 /* ==================== CONTACT SECTION ==================== */
 .contact-section {
-    background: linear-gradient(135deg, #2A1B4D 0%, #1B1549 100%);
+    position: relative;
+    background:#1B1549;
     padding: 68px 17px;
     color: var(--white);
     text-align: center;
+    border-top-right-radius: 130px;
+}
+
+.contact-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 130px;
+    height: 130px;
+    background: #1CBCBD;
+    z-index: -1;
 }
 
 .contact-container {
@@ -539,14 +579,14 @@ body {
 }
 
 .contact-section h2 {
-    font-family: var(--font-lato);
-    font-size: 1.7rem;
+    font-family: var(--font-barlow);
+    font-size: 27px;
     font-weight: 400;
     margin-bottom: 13px;
 }
 
 .contact-subtitle {
-    font-size: 0.96rem;
+    font-size: 14px;
     margin-bottom: 34px;
     opacity: 0.9;
 }
@@ -588,8 +628,8 @@ body {
 .submit-button {
     width: 100%;
     padding: 15px 34px;
-    font-size: 0.85rem;
-    font-weight: 700;
+    font-size: 16.5px;
+    font-weight: 500;
     font-family: var(--font-lato);
     letter-spacing: 0.85px;
     text-transform: uppercase;
