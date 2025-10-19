@@ -322,13 +322,13 @@ body {
 
 /* ==================== RESULTS PANEL ==================== */
 .primary-results {
-    margin-bottom: 34px;
+    margin-bottom: 30px;
 }
 
 .result-card-main {
     background: var(--primary-teal);
     border-radius: 8px;
-    padding: 21px;
+    padding: 10px;
     text-align: center;
     margin-bottom: 17px;
 }
@@ -339,7 +339,7 @@ body {
     letter-spacing: 0.43px;
     text-transform: uppercase;
     color: var(--white);
-    margin-bottom: 9px;
+    margin-top: 5px;
 }
 
 .result-value-large {
@@ -370,7 +370,7 @@ body {
 .result-value-medium {
     font-family: var(--font-lato);
     font-size: 1.49rem;
-    font-weight: 700;
+    font-weight: 400;
     color: var(--primary-black);
 }
 
@@ -387,16 +387,16 @@ body {
     letter-spacing: 0.43px;
     text-transform: uppercase;
     color: var(--white);
-    margin-bottom: 9px;
+    margin-bottom: 0px;
     opacity: 0.9;
 }
 
 .investment-value {
     font-family: var(--font-lato);
-    font-size: 1.49rem;
-    font-weight: 700;
+    font-size: 1.7rem;
+    font-weight: 500;
     color: var(--primary-teal);
-    margin-bottom: 4px;
+    margin-bottom: 0px;
 }
 
 .investment-detail {
@@ -406,8 +406,14 @@ body {
 }
 
 /* Savings Breakdown */
+.savings-breakdown {
+    padding-top: 20px;
+    border-top: 1px solid #E9ECEF;
+    margin-top: 20px;
+}
+
 .savings-breakdown h3 {
-    font-size: 0.94rem;
+    font-size: 1rem;
     font-weight: 400;
     color: var(--primary-black);
     margin-bottom: 17px;
@@ -423,8 +429,10 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 0;
-    border-bottom: 1px solid #E9ECEF;
+    padding: 12px 15px;
+    background: #F8F9FA;
+    border-radius: 6px;
+    border: none;
 }
 
 .breakdown-item:last-child {
@@ -432,13 +440,13 @@ body {
 }
 
 .breakdown-label {
-    font-size: 0.77rem;
+    font-size: 0.8rem;
     color: var(--medium-gray);
 }
 
 .breakdown-value {
-    font-size: 0.81rem;
-    font-weight: 600;
+    font-size: 0.8rem;
+    font-weight: 500;
     color: var(--primary-teal);
 }
 
