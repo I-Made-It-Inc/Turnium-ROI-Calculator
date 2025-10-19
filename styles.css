@@ -1,3 +1,32 @@
+/* Myriad Pro Font Face Declarations */
+@font-face {
+    font-family: 'Myriad Pro';
+    src: url('information/fonts/myriad-pro/MYRIADPRO-REGULAR.OTF') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Myriad Pro';
+    src: url('information/fonts/myriad-pro/MYRIADPRO-BOLD.OTF') format('opentype');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Myriad Pro';
+    src: url('information/fonts/myriad-pro/MYRIADPRO-SEMIBOLD.OTF') format('opentype');
+    font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Myriad Pro';
+    src: url('information/fonts/myriad-pro/MyriadPro-Light.otf') format('opentype');
+    font-weight: 300;
+    font-style: normal;
+}
+
 :root {
     /* Color Palette from Design */
     --primary-teal: #1CBCBD;
@@ -9,6 +38,7 @@
     --dark-purple: #2A1B4D;
 
     /* Fonts */
+    --font-myriad: 'Myriad Pro', sans-serif;
     --font-barlow: 'Barlow', sans-serif;
     --font-barlow-semi: 'Barlow Semi Condensed', sans-serif;
     --font-lato: 'Lato', sans-serif;
@@ -34,13 +64,14 @@ body {
 /* ==================== HERO SECTION ==================== */
 .hero-section {
     position: relative;
-    background: linear-gradient(to right, rgba(26, 26, 26, 0.85), rgba(26, 26, 26, 0.7)),
+    background: linear-gradient(to right, rgba(26, 26, 26, 0.85) 0%, rgba(26, 26, 26, 0.85) 50%, rgba(26, 26, 26, 0) 66%),
                 url('information/TTGI011_Calculator_V1_Jose/Links/iStock-1363467852.jpg');
     background-size: cover;
     background-position: center right;
     min-height: 400px;
     padding: 60px 40px 80px;
     color: var(--white);
+    border-bottom-right-radius: 120px;
 }
 
 .hero-content {
@@ -51,58 +82,65 @@ body {
     align-items: flex-start;
 }
 
+.hero-text {
+    max-width: 600px;
+}
+
 .hero-logo {
     flex-shrink: 0;
+    width: 120px;
 }
 
 .hero-logo img {
-    width: 120px;
+    width: 100%;
     height: auto;
 }
 
 .hero-text h1 {
-    font-family: var(--font-barlow);
-    font-size: 2.5rem;
+    font-family: var(--font-myriad);
+    font-size: 53px;
     font-weight: 400;
-    line-height: 1.2;
-    margin-bottom: 20px;
+    line-height: 52.86px;
+    letter-spacing: -1.06px;
+    margin-bottom: 30px;
 }
 
 .hero-text h1 .highlight {
-    color: var(--primary-teal);
-    font-weight: 600;
+    color: var(--white);
+    font-weight: 700;
 }
 
 .hero-subtitle {
-    font-size: 1.25rem;
+    font-family: var(--font-barlow-semi);
+    font-size: 36px;
+    line-height: 36.98px;
+    letter-spacing: -0.72px;
     color: var(--primary-teal);
-    margin-bottom: 20px;
-    line-height: 1.4;
+    margin-bottom: 30px;
 }
 
 .hero-description {
-    font-size: 1rem;
+    font-family: var(--font-myriad);
+    font-size: 25px;
     line-height: 1.6;
-    margin-bottom: 25px;
-    max-width: 700px;
+    margin-bottom: 30px;
 }
 
 .hero-cta {
-    font-size: 1rem;
+    font-family: var(--font-myriad);
+    font-size: 25px;
+    font-weight: 700;
     line-height: 1.6;
+    margin-bottom: 0;
 }
 
-.hero-arrow {
-    position: absolute;
-    bottom: -1px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 0;
-    height: 0;
-    border-left: 40px solid transparent;
-    border-right: 40px solid transparent;
-    border-top: 30px solid rgba(26, 26, 26, 0.85);
+.hero-message-arrow {
+    width: 100%;
+    height: auto;
+    display: block;
+    margin-top: calc(1.6em * 0.5);
 }
+
 
 /* ==================== CALCULATOR SECTION ==================== */
 .calculator-section {
