@@ -71,7 +71,7 @@ body {
     min-height: 340px;
     padding: 50px 30px 60px;
     color: var(--white);
-    border-bottom-right-radius: 100px;
+    border-bottom-right-radius: 130px;
 }
 
 .hero-content {
@@ -134,7 +134,7 @@ body {
 .hero-cta {
     font-family: var(--font-barlow-semi);
     font-size: 25px;
-    font-weight: 700;
+    font-weight: 600;
     line-height: 1.2;
     margin-bottom: 0;
 }
@@ -168,14 +168,14 @@ body {
 .results-panel {
     background: var(--white);
     border: 1px solid #E9ECEF;
-    border-radius: 7px;
+    border-radius: 8px;
     padding: 34px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .panel-title {
-    font-family: var(--font-lato);
-    font-size: 1.28rem;
+    font-family: var(--font-barlow);
+    font-size: 25px;
     font-weight: 400;
     color: var(--primary-black);
     margin-bottom: 9px;
@@ -257,7 +257,7 @@ body {
 }
 
 .security-measures h3 {
-    font-size: 0.94rem;
+    font-size: 1rem;
     font-weight: 400;
     color: var(--primary-black);
     margin-bottom: 17px;
@@ -274,7 +274,11 @@ body {
     align-items: center;
     cursor: pointer;
     position: relative;
-    padding-left: 27px;
+    padding: 12px 15px;
+    padding-left: 45px;
+    background: #F8F9FA;
+    border-radius: 6px;
+    border: none;
 }
 
 .checkbox-item input[type="checkbox"] {
@@ -285,10 +289,11 @@ body {
 
 .checkbox-custom {
     position: absolute;
-    left: 0;
-    top: 2px;
-    width: 17px;
-    height: 17px;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
     border: 2px solid var(--primary-teal);
     border-radius: 3px;
     background: var(--white);
@@ -301,17 +306,17 @@ body {
 .checkbox-item input[type="checkbox"]:checked + .checkbox-custom::after {
     content: '';
     position: absolute;
-    left: 4px;
-    top: 2px;
+    left: 4.5px;
+    top: 1px;
     width: 5px;
-    height: 9px;
+    height: 10px;
     border: solid var(--white);
     border-width: 0 2px 2px 0;
     transform: rotate(45deg);
 }
 
 .checkbox-label {
-    font-size: 0.77rem;
+    font-size: 0.8rem;
     color: var(--primary-black);
 }
 
@@ -322,7 +327,7 @@ body {
 
 .result-card-main {
     background: var(--primary-teal);
-    border-radius: 7px;
+    border-radius: 8px;
     padding: 21px;
     text-align: center;
     margin-bottom: 17px;
@@ -353,7 +358,7 @@ body {
 
 .result-card-small {
     background: var(--light-bg);
-    border-radius: 7px;
+    border-radius: 8px;
     padding: 17px;
     text-align: center;
 }
@@ -371,7 +376,7 @@ body {
 
 .investment-card {
     background: var(--primary-navy);
-    border-radius: 7px;
+    border-radius: 8px;
     padding: 21px;
     text-align: center;
 }
