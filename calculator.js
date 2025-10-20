@@ -410,11 +410,11 @@ class ROICalculator {
             { label: 'Cyber Insurance Premium Reduction', value: insuranceSavings, id: 'insurance-savings' },
             { label: 'Data Breach Prevention', value: breachSavings, id: 'breach-savings' },
             { label: 'Ransomware Attack Prevention', value: ransomwareSavings, id: 'ransomware-savings' },
-            { label: 'Business Email Compromise Prevention', value: becSavings, id: 'bec-savings' },
+            { label: 'Email Fraud Prevention', value: becSavings, id: 'bec-savings' },
             { label: 'Compliance Efficiency Gains', value: complianceSavings, id: 'compliance-savings' },
             { label: 'IT Management Consolidation', value: itSavings, id: 'it-savings' },
             { label: 'Downtime Prevention Value', value: downtimeSavings, id: 'downtime-savings' },
-            { label: 'Client Trust & Retention Protection', value: retentionSavings, id: 'retention-savings' },
+            { label: 'Client Trust & Retention', value: retentionSavings, id: 'retention-savings' },
             { label: 'Tax Preparer Penalty Prevention', value: penaltySavings, id: 'penalty-savings' }
         ];
 
@@ -422,7 +422,7 @@ class ROICalculator {
         savingsCategories.sort((a, b) => b.value - a.value);
 
         // Update the breakdown items container
-        const breakdownContainer = document.querySelector('.breakdown-items');
+        const breakdownContainer = document.querySelector('.breakdown-list');
         if (breakdownContainer) {
             // Clear existing items
             breakdownContainer.innerHTML = '';
@@ -432,8 +432,8 @@ class ROICalculator {
                 const itemDiv = document.createElement('div');
                 itemDiv.className = 'breakdown-item';
                 itemDiv.innerHTML = `
-                    <span class="item-label">${category.label}</span>
-                    <span class="item-value" id="${category.id}">${this.formatCurrency(category.value)}</span>
+                    <span class="breakdown-label">${category.label}</span>
+                    <span class="breakdown-value" id="${category.id}">${this.formatCurrency(category.value)}</span>
                 `;
                 breakdownContainer.appendChild(itemDiv);
             });
