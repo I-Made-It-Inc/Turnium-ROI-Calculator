@@ -1,28 +1,28 @@
 /* Myriad Pro Font Face Declarations */
 @font-face {
     font-family: 'Myriad Pro';
-    src: url('information/fonts/myriad-pro/MYRIADPRO-REGULAR.OTF') format('opentype');
+    src: url('assets/fonts/myriad-pro/MYRIADPRO-REGULAR.OTF') format('opentype');
     font-weight: 400;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'Myriad Pro';
-    src: url('information/fonts/myriad-pro/MYRIADPRO-BOLD.OTF') format('opentype');
+    src: url('assets/fonts/myriad-pro/MYRIADPRO-BOLD.OTF') format('opentype');
     font-weight: 700;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'Myriad Pro';
-    src: url('information/fonts/myriad-pro/MYRIADPRO-SEMIBOLD.OTF') format('opentype');
+    src: url('assets/fonts/myriad-pro/MYRIADPRO-SEMIBOLD.OTF') format('opentype');
     font-weight: 600;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'Myriad Pro';
-    src: url('information/fonts/myriad-pro/MyriadPro-Light.otf') format('opentype');
+    src: url('assets/fonts/myriad-pro/MyriadPro-Light.otf') format('opentype');
     font-weight: 300;
     font-style: normal;
 }
@@ -65,7 +65,7 @@ body {
 .hero-section {
     position: relative;
     background: linear-gradient(to right, rgba(26, 26, 26, 0.75) 0%, rgba(26, 26, 26, 0.75) 40%, rgba(26, 26, 26, 0) 50%),
-                url('information/TTGI011_Calculator_V1_Jose/Links/iStock-1363467852.jpg');
+                url('assets/images/hand_lock.jpg');
     background-size: cover;
     background-position: center right;
     min-height: 340px;
